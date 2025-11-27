@@ -1,17 +1,17 @@
-# ÉèÖÃ¸÷¸öÇëÇó²ÎÊı
+# è®¾ç½®å„ä¸ªè¯·æ±‚å‚æ•°
 Param(
-    # µÇÂ¼·½Ê½£º0£ºµçÄÔ¿Í»§¶ËµÇÂ¼ 1£ºÊÖ»ú¿Í»§¶ËµÇÂ¼
+    # ç™»å½•æ–¹å¼ï¼š0ï¼šç”µè„‘å®¢æˆ·ç«¯ç™»å½• 1ï¼šæ‰‹æœºå®¢æˆ·ç«¯ç™»å½•
     $METHOD = '0',
-    # ÓÃ»§ÕËºÅ
-    $ACCOUNT = '',
-    # ÓÃ»§ÃÜÂë
-    $PASSWORD = '',
-    # µÇÂ¼Éè±¸µÄMAC µØÖ·£¨xx-xx-xx-xx-xx-xx£©[Îª¿ÕÔò×Ô¶¯»ñÈ¡]
+    # ç”¨æˆ·è´¦å·
+    $ACCOUNT = '20240309430407',
+    # ç”¨æˆ·å¯†ç 
+    $PASSWORD = '035711',
+    # ç™»å½•è®¾å¤‡çš„MAC åœ°å€ï¼ˆxx-xx-xx-xx-xx-xxï¼‰[ä¸ºç©ºåˆ™è‡ªåŠ¨è·å–]
     $MAC = '',
-    # µÇÂ¼Éè±¸µÄIP µØÖ·£¨IPv4£©[Îª¿ÕÔò×Ô¶¯»ñÈ¡]
+    # ç™»å½•è®¾å¤‡çš„IP åœ°å€ï¼ˆIPv4ï¼‰[ä¸ºç©ºåˆ™è‡ªåŠ¨è·å–]
     $IP = '',
-    # »ñÈ¡MACºÍIPµÄÍø¿¨Ãû³Æ[Îª¿ÕÔòÊ¹ÓÃ×Ô¶¨Òå]
-    $ADAPTERNAME = 'ÒÔÌ«Íø'
+    # è·å–MACå’ŒIPçš„ç½‘å¡åç§°[ä¸ºç©ºåˆ™ä½¿ç”¨è‡ªå®šä¹‰]
+    $ADAPTERNAME = 'ä»¥å¤ªç½‘'
 )
 function Output_Log {
     param (
@@ -26,45 +26,45 @@ $outStr
 
 #=======================================================================
 if (!($ACCOUNT -and $PASSWORD)) {
-    $outstr = "È±ÉÙÕËºÅ»òÃÜÂë£¬½Å±¾½«ÍË³ö."
+    $outstr = "ç¼ºå°‘è´¦å·æˆ–å¯†ç ï¼Œè„šæœ¬å°†é€€å‡º."
     Output_Log -outStr $outstr -fileName "Login_Error_($ACCOUNT)"
     exit
 }
 #=======================================================================
-# Ê¹ÓÃ±äÁ¿´æ´¢»ñÈ¡ÊÊÅäÆ÷µÄ½á¹û
+# ä½¿ç”¨å˜é‡å­˜å‚¨è·å–é€‚é…å™¨çš„ç»“æœ
 $adapter = Get-NetAdapter -Name $ADAPTERNAME
-# ¼ì²éÊÇ·ñ³É¹¦»ñÈ¡µ½ÊÊÅäÆ÷
+# æ£€æŸ¥æ˜¯å¦æˆåŠŸè·å–åˆ°é€‚é…å™¨
 if ($adapter) {
     $adapterName = $($adapter.Name)
     if ( $MAC ) {
         $macAddress = $MAC -replace '-'
     }
     else {
-        # »ñÈ¡ÊÊÅäÆ÷µÄ MAC µØÖ·
+        # è·å–é€‚é…å™¨çš„ MAC åœ°å€
         $macAddress = $adapter.MacAddress -replace '-'
     }
     if ( $IP) {
         $ipAddress = $IP
     }
     else {
-        # »ñÈ¡ÊÊÅäÆ÷µÄ IP µØÖ·£¨IPv4£©
+        # è·å–é€‚é…å™¨çš„ IP åœ°å€ï¼ˆIPv4ï¼‰
         $ipAddress = (Get-NetIPAddress -InterfaceAlias $ADAPTERNAME -AddressFamily IPv4).IPAddress
     }
 }
 else {
-    $adapterName = "ÊÊÅäÆ÷Î´ÕÒµ½"
+    $adapterName = "é€‚é…å™¨æœªæ‰¾åˆ°"
     if ( $MAC -and $IP ) {
         $macAddress = $MAC -replace '-'
         $ipAddress = $IP
     }
     else {
-        $outstr = "È±ÉÙMAC»òIP£¬½Å±¾½«ÍË³ö."
+        $outstr = "ç¼ºå°‘MACæˆ–IPï¼Œè„šæœ¬å°†é€€å‡º."
         Output_Log -outStr $outstr -fileName "Login_Error_($ACCOUNT)"
         exit
     }
 }
 
-# ÉèÖÃÇëÇóµÄ»ù´¡URL
+# è®¾ç½®è¯·æ±‚çš„åŸºç¡€URL
 $baseURL = "http://10.0.10.252:801/eportal/?c=Portal&a=login&login_method=1&wlan_ac_ip=10.128.255.142"
 
 $user_account = ",$METHOD,$ACCOUNT"
@@ -72,18 +72,18 @@ $user_password = $PASSWORD
 $wlan_user_mac = $macAddress
 $wlan_user_ip = $ipAddress
 
-# ¹¹½¨ÍêÕûµÄURL
+# æ„å»ºå®Œæ•´çš„URL
 $fullURL = "$baseURL&user_account=$user_account&user_password=$user_password&wlan_user_ip=$wlan_user_ip&wlan_user_mac=$wlan_user_mac"
 
-# Ö´ĞĞHTTP GETÇëÇó
+# æ‰§è¡ŒHTTP GETè¯·æ±‚
 $response = Invoke-RestMethod -Uri $fullURL -Method GET
 
-# ½«Unicode×ª»»ÎªÎÄ±¾
+# å°†Unicodeè½¬æ¢ä¸ºæ–‡æœ¬
 $decodedResponse = [regex]::Unescape($response)
 
-# ÏÔÊ¾½âÂëºóµÄÎÄ±¾
-$outstr = "Íø¿¨: $adapterName
+# æ˜¾ç¤ºè§£ç åçš„æ–‡æœ¬
+$outstr = "ç½‘å¡: $adapterName
 MAC:  $macAddress
 IP:   $ipAddress
-½á¹û: $decodedResponse"
+ç»“æœ: $decodedResponse"
 Output_Log -outStr $outstr -fileName "Login_Info_($ACCOUNT-$macAddress)"
